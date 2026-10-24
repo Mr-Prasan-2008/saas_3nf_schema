@@ -1,0 +1,85 @@
+digraph SaaS_ER {
+  graph [rankdir=LR, bgcolor="white", pad="0.25", nodesep="0.45", ranksep="0.85", splines=polyline, fontname="Arial", label="Multi-Tenant SaaS Relational Schema", labelloc=t, fontsize=22];
+  node [shape=plain, fontname="Arial", fontsize=10];
+  edge [fontname="Arial", fontsize=9, color="#475569", arrowsize=0.75];
+
+  tenants [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5">
+      <TR><TD BGCOLOR="#16324F" COLSPAN="2"><FONT COLOR="white"><B>TENANTS</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B> tenant_id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>UQ</B> tenant_slug</TD><TD ALIGN="LEFT">TEXT</TD></TR>
+      <TR><TD ALIGN="LEFT">display_name</TD><TD ALIGN="LEFT">TEXT</TD></TR>
+      <TR><TD ALIGN="LEFT">created_at</TD><TD ALIGN="LEFT">TIMESTAMPTZ</TD></TR>
+    </TABLE>>];
+  tenant_settings [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5">
+      <TR><TD BGCOLOR="#2563EB" COLSPAN="2"><FONT COLOR="white"><B>TENANT_SETTINGS</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK/FK</B> tenant_id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+      <TR><TD ALIGN="LEFT">time_zone</TD><TD ALIGN="LEFT">TEXT</TD></TR>
+      <TR><TD ALIGN="LEFT">retention_days</TD><TD ALIGN="LEFT">INTEGER</TD></TR>
+      <TR><TD ALIGN="LEFT">support_email</TD><TD ALIGN="LEFT">TEXT</TD></TR>
+    </TABLE>>];
+  users [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5">
+      <TR><TD BGCOLOR="#16324F" COLSPAN="2"><FONT COLOR="white"><B>USERS</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B> user_id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>UQ</B> email</TD><TD ALIGN="LEFT">TEXT</TD></TR>
+      <TR><TD ALIGN="LEFT">display_name</TD><TD ALIGN="LEFT">TEXT</TD></TR>
+      <TR><TD ALIGN="LEFT">created_at</TD><TD ALIGN="LEFT">TIMESTAMPTZ</TD></TR>
+    </TABLE>>];
+  memberships [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5">
+      <TR><TD BGCOLOR="#0F766E" COLSPAN="2"><FONT COLOR="white"><B>TENANT_MEMBERSHIPS</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK/FK</B> tenant_id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK/FK</B> user_id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+      <TR><TD ALIGN="LEFT">role</TD><TD ALIGN="LEFT">TEXT</TD></TR>
+      <TR><TD ALIGN="LEFT">joined_at</TD><TD ALIGN="LEFT">TIMESTAMPTZ</TD></TR>
+    </TABLE>>];
+  projects [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5">
+      <TR><TD BGCOLOR="#16324F" COLSPAN="2"><FONT COLOR="white"><B>PROJECTS</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B> project_id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>FK</B> tenant_id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+      <TR><TD ALIGN="LEFT">project_key</TD><TD ALIGN="LEFT">TEXT</TD></TR>
+      <TR><TD ALIGN="LEFT">project_name</TD><TD ALIGN="LEFT">TEXT</TD></TR>
+      <TR><TD ALIGN="LEFT">status</TD><TD ALIGN="LEFT">TEXT</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>FK</B> created_by_user_id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+    </TABLE>>];
+  tasks [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5">
+      <TR><TD BGCOLOR="#2563EB" COLSPAN="2"><FONT COLOR="white"><B>TASKS</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B> task_id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>FK</B> tenant_id, project_id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>FK</B> assignee_user_id</TD><TD ALIGN="LEFT">BIGINT / NULL</TD></TR>
+      <TR><TD ALIGN="LEFT">title</TD><TD ALIGN="LEFT">TEXT</TD></TR>
+      <TR><TD ALIGN="LEFT">status, priority</TD><TD ALIGN="LEFT">TEXT</TD></TR>
+      <TR><TD ALIGN="LEFT">due_date</TD><TD ALIGN="LEFT">DATE / NULL</TD></TR>
+    </TABLE>>];
+  tags [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5">
+      <TR><TD BGCOLOR="#16324F" COLSPAN="2"><FONT COLOR="white"><B>TAGS</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B> tag_id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>FK</B> tenant_id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+      <TR><TD ALIGN="LEFT">tag_name</TD><TD ALIGN="LEFT">TEXT</TD></TR>
+      <TR><TD ALIGN="LEFT">color</TD><TD ALIGN="LEFT">TEXT</TD></TR>
+    </TABLE>>];
+  project_tags [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5">
+      <TR><TD BGCOLOR="#0F766E" COLSPAN="2"><FONT COLOR="white"><B>PROJECT_TAGS</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK/FK</B> tenant_id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK/FK</B> project_id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK/FK</B> tag_id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+      <TR><TD ALIGN="LEFT">created_at</TD><TD ALIGN="LEFT">TIMESTAMPTZ</TD></TR>
+    </TABLE>>];
+
+  tenants -> tenant_settings [label="1:1 (optional)"];
+  tenants -> projects [label="1:N"];
+  tenants -> memberships [label="1:N"];
+  users -> memberships [label="1:N"];
+  memberships -> projects [label="creator must be tenant member", fontsize=8];
+  projects -> tasks [label="1:N; delete cascades"];
+  memberships -> tasks [label="assignee must be tenant member", fontsize=8];
+  tenants -> tags [label="1:N"];
+  projects -> project_tags [label="1:N"];
+  tags -> project_tags [label="1:N"];
+}

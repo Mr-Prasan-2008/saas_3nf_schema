@@ -1,0 +1,14 @@
+saas_3nf_schema/
+├── README.md
+├── LICENSE
+├── .gitignore
+├── migrations/001_initial_schema.sql
+├── fixtures/001_seed_data.sql
+├── tests/run_all.sql
+├── tests/verify_constraints.sql
+└── docs/
+    ├── er-diagram.md
+    ├── design-and-3nf.md
+    ├── expected-results.md
+    ├── github-setup.md
+    └── submission-checklist.md

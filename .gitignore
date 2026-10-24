@@ -1,0 +1,13 @@
+# Local test output (optional; add deliberately if you want to publish evidence)
+docs/local-test-output.txt
+
+# Local environment / secrets
+.env
+.env.*
+!.env.example
+
+# Editor / operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
